@@ -4,7 +4,7 @@
 # It should be allowed to run for up to 24 hours.
 #PBS -l walltime=20:00:00
 # Name of job.
-#PBS -N caTest
+#PBS -N eventClassifier
 # Join STDERR TO STDOUT.  (omit this if you want separate STDOUT AND STDERR)
 #PBS -j oe
 

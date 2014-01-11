@@ -93,9 +93,10 @@ if __name__ == '__main__':
   from storyLab import happiness
 
   # initialize counters and a list of the happiness values
-  hourCount = 0
   happsList = [0 for i in range(24*(buildDays*2+1))]
-
+  dateList = ['' for i in range(24*(buildDays*2+1))]
+  hourCount = 0
+  
   # reset the date
   date = datetime.datetime(year,month,day)
   date+=datetime.timedelta(days=-buildDays)
@@ -106,6 +107,8 @@ if __name__ == '__main__':
     # then hours
     for hour in range(24):
       hourCount+=1
+      hourDateString = '{0}.{1}'.format(str(hour),dateString)
+      dateList[hourCount-1] = hourDateString
       # open the file and read contents in a big string
       f = open('{0}/{1:02d}.{2}.txt'.format(eventFolder,hour,dateString),'r')
       tmpStr = f.read()
@@ -115,9 +118,9 @@ if __name__ == '__main__':
       happsList[hourCount-1] = happiness(tmpStr,lens)
 
   # write this data to a csv real quick
-  f = open('{0}/output.csv'.format(eventFolder),'w')
+  f = open('{0}/output.csv'.format(eventFolder),'a')
   for i in range(len(happsList)):
-    f.write('{0},{1}\n'.format(freqList[i],happsList[i]))
+    f.write('{0},{1},{2}\n'.format(dateList[i],freqList[i],happsList[i]))
   f.close()
 
   # we hope the see this line
