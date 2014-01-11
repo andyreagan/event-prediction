@@ -10,5 +10,5 @@
 
 cd /users/a/r/areagan/work/2014/event-prediction
 
-echo "python make-timeseries.py $EVENTYEAR $EVENTMONTH $EVENTDAY $MAXDAYS $EVENTNAME"
+python makeTimeseries.py $EVENTYEAR $EVENTMONTH $EVENTDAY $MAXDAYS $EVENTNAME
 

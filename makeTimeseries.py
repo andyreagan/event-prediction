@@ -31,10 +31,16 @@ def parser5(infile,freqList,hourCount,keyWords,eventFolder):
       # try:
       for line in f:
         tweet = loads(line)
-        for keyWord in keyWords:
-          if keyWord in tweet['text']:
-            freqList[hourCount+int(memberHourDate[0:2])] += 1
-            g.write('{}\n'.format(tweet['text']))
+        try:
+          if tweet['text']:
+            for keyWord in keyWords:
+              if keyWord in tweet['text']:
+                # print 'found a tweet'
+                freqList[hourCount+int(memberHourDate[0:2])] += 1
+                g.write('{}\n'.format(tweet['text']))
+        except:
+          # print 'something went wrong'
+          pass
       # except:
       #   print 'could not loop over f (or decode line)'
       f.close()
@@ -106,7 +112,7 @@ if __name__ == '__main__':
       f.close()
       
       # evaluate the happiness of that string
-      happsList[hourCount-1] = happiness(tmpStr)
+      happsList[hourCount-1] = happiness(tmpStr,lens)
 
   # write this data to a csv real quick
   f = open('{0}/output.csv'.format(eventFolder),'w')
