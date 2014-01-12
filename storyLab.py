@@ -39,13 +39,13 @@ def microscope(stopval):
     del tmp[word]
   return tmp
 
-def happiness(tmpstr,LabMT):
+def emotion(tmpStr,someDict):
   score_list = []
   # doing this without the NLTK
-  words = [x.lower().lstrip("?';:.$%&()\\!*[]{}|\"<>,^-_=+").rstrip("@#?';:.$%&()\\!*[]{}|\"<>,^-_=+") for x in tmpstr.split()]
+  words = [x.lower().lstrip("?';:.$%&()\\!*[]{}|\"<>,^-_=+").rstrip("@#?';:.$%&()\\!*[]{}|\"<>,^-_=+") for x in tmpStr.split()]
   for word in words:
-    if word in LabMT:
-      score_list.append(float(LabMT[word][1]))
+    if word in someDict:
+      score_list.append(float(someDict[word][1]))
 
   ## with numpy (and mean in the namespace)
   ## happs = mean(score_list)
@@ -55,8 +55,10 @@ def happiness(tmpstr,LabMT):
     happs = sum(score_list)/float(len(score_list))
   else:
     happs = 0
-    
   return happs
+
+def allEmotions(tmpStr,*args):
+  
 
 def plothapps(happsTimeSeries,picname):
   ## uses matplotlib

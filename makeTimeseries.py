@@ -88,11 +88,9 @@ if __name__ == '__main__':
   # no controls for volume yet, just taking the happiness of each hour file
 
   # use the happiness module that i wrote  
-  from storyLab import microscope
+  from storyLab import *
   lens = microscope(1)
-  # yes i designed this
-  from storyLab import happiness
-
+  
   # initialize counters and a list of the happiness values
   happsList = [0 for i in range(24*(buildDays*2+1))]
   dateList = ['' for i in range(24*(buildDays*2+1))]
@@ -116,7 +114,7 @@ if __name__ == '__main__':
       f.close()
       
       # evaluate the happiness of that string
-      happsList[hourCount-1] = happiness(tmpStr,lens)
+      happsList[hourCount-1] = emotion(tmpStr,lens)
 
   # write this data to a csv real quick
   f = open('{0}/output.csv'.format(eventFolder),'a')
