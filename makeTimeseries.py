@@ -57,6 +57,7 @@ if __name__ == '__main__':
   eventFolder = '/users/a/r/areagan/work/2014/event-prediction/{}'.format(eventName)
   f = open('{}/keywords.txt'.format(eventFolder))
   keyWords = [line.rstrip() for line in f]
+  
   f.close()
   # check these are the right keywords!
   print keyWords
