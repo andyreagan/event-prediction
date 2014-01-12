@@ -54,7 +54,7 @@ if __name__ == '__main__':
   eventName = argv[5]
 
   # read in more things
-  eventFolder = '/users/a/r/areagan/work/2014/event-prediction/{}'.format(eventName)
+  eventFolder = '/users/a/r/areagan/work/2014/event-prediction/events/{}'.format(eventName)
   f = open('{}/keywords.txt'.format(eventFolder))
   keyWords = [line.rstrip() for line in f]
   
