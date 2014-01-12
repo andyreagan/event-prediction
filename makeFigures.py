@@ -8,7 +8,6 @@ def dateSort(listToSort,dates,sortedDates):
   tmp = [listToSort[i] for i in range(len(listToSort))]
   for i in range(len(listToSort)):
     tmp[i] = listToSort[dates.index(sortedDates[i])]
-
   return tmp
 
 if __name__ == '__main__':
@@ -22,7 +21,7 @@ if __name__ == '__main__':
   picname = 'figures/{0}.png'.format(eventName)
 
   # get the data
-  f = open('{0}/output.csv'.format(eventName),'r')
+  f = open('events/{0}/output.csv'.format(eventName),'r')
   rawData = []
   for line in f:
     lineList = line.split(',')

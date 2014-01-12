@@ -26,7 +26,7 @@ def parser5(infile,freqList,hourCount,keyWords,eventFolder):
     # check that this is a file (the folder is in the tar)
     if len(memberHourDate) > 0:
       # open corresponding outfile
-      g = codecs.open('{0}/{1}.txt'.format(eventFolder,memberHourDate),'a','utf8')
+      g = codecs.open('{0}/tweets/{1}.txt'.format(eventFolder,memberHourDate),'a','utf8')
       f = tar.extractfile(member)
       # try:
       for line in f:
@@ -54,7 +54,7 @@ if __name__ == '__main__':
   eventName = argv[5]
 
   # read in more things
-  eventFolder = '/users/a/r/areagan/work/2014/event-prediction/{}'.format(eventName)
+  eventFolder = '/users/a/r/areagan/work/2014/event-prediction/events/{}'.format(eventName)
   f = open('{}/keywords.txt'.format(eventFolder))
   keyWords = [line.rstrip() for line in f]
   
@@ -113,7 +113,7 @@ if __name__ == '__main__':
       hourDateString = '{0}.{1}'.format(str(hour),dateString)
       dateList[hourCount-1] = hourDateString
       # open the file and read contents in a big string
-      f = open('{0}/{1:02d}.{2}.txt'.format(eventFolder,hour,dateString),'r')
+      f = open('{0}/tweets/{1:02d}.{2}.txt'.format(eventFolder,hour,dateString),'r')
       tmpStr = f.read()
       f.close()
       
