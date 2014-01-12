@@ -37,7 +37,7 @@ cd /users/a/r/areagan/work/2014/event-prediction
 export EVENTYEAR="2013"
 export EVENTMONTH="04"
 export MAXDAYS="0"
-export EVENTNAME="boston002"
+export EVENTNAME="boston003"
 for DAY in {11..19}
 do
   export EVENTDAY=$DAY
@@ -48,7 +48,7 @@ done
 export EVENTYEAR="2011"
 export EVENTMONTH="04"
 export MAXDAYS="0"
-export EVENTNAME="wedding002"
+export EVENTNAME="wedding003"
 for DAY in {25..30}
 do
   export EVENTDAY=$DAY
