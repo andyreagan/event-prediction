@@ -14,6 +14,25 @@
 #   lens = emotionFileReader(0.0)
 #   from storyLab import emotion
 #   happs = emotion(tmpstr,lens)
+# 
+# My test:
+# >>> test = emotionFileReader(max=3.0)
+# >>> len(test)
+# 410
+# >>> emotion('hate hate hate the',test)
+# 2.34
+# >>> test2 = emotionFileReader(min=7.0)
+# >>> emotion('hate hate hate the',test2)
+# 0
+# >>> emotion('hate hate hate the laugh',test2)
+# 8.22
+# >>> test3 = emotionFileReader()
+# >>> emotion('hate hate hate the laugh',test3)
+# 4.044
+# >>> allEmotions('hate hate hate the laugh',test3)
+# [4.044]
+# >>> allEmotions('hate hate hate the laugh',test,test2,test3)
+# [2.34, 8.22, 4.044]
 #
 # In a shell:
 #   alias happiness="$(pwd)/storyLab.py"
