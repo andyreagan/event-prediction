@@ -10,10 +10,10 @@
 #
 # In python:
 #   tmpstr = 'a happy sentence'
-#   from storyLab import microscope
-#   lens = microscope(0)
-#   from storyLab import happiness
-#   happs = happiness(tmpstr,lens)
+#   from storyLab import emotionFileReader
+#   lens = emotionFileReader(0.0)
+#   from storyLab import emotion
+#   happs = emotion(tmpstr,lens)
 #
 # In a shell:
 #   alias happiness="$(pwd)/storyLab.py"
@@ -21,31 +21,39 @@
 #   storyLab.py happiness
 #
 # written by Andy Reagan
-# 2013-12-09
+# 2014-01-12
 
-def microscope(stopval):
+def emotionFileReader(stopval=0.0,fileName='labMT1.txt',min=1.0,max=9.0):
   ## stopval is our lens, \Delta h
   ## read the labMT dataset into a dict with this lens
-  f = open('labMT1.txt','r')
-  tmp = dict([(line.split('\t')[0],[x.rstrip() for x in line.split('\t')[1:]]) for line in f])
+  ## must be tab-deliminated, emotion value as third tab
+  f = open(fileName,'r')
+  tmpDict = dict([(line.split('\t')[0],[x.rstrip() for x in line.split('\t')[1:]]) for line in f])
   f.close()
   ## remove words
   stopWords = []
-  if stopval > 0:
-    for word in tmp:
-      if abs(float(tmp[word][1])-5.0) < stopval:
+  for word in tmpDict:
+    if abs(float(tmpDict[word][1])-5.0) < stopval:
+      stopWords.append(word)
+    else:
+      if float(tmpDict[word][1]) < min:
         stopWords.append(word)
+      else:
+        if float(tmpDict[word][1]) > max:
+          stopWords.append(word)
+  
   for word in stopWords:
-    del tmp[word]
-  return tmp
+    del tmpDict[word]
 
-def happiness(tmpstr,LabMT):
+  return tmpDict
+
+def emotion(tmpStr,someDict):
   score_list = []
   # doing this without the NLTK
-  words = [x.lower().lstrip("?';:.$%&()\\!*[]{}|\"<>,^-_=+").rstrip("@#?';:.$%&()\\!*[]{}|\"<>,^-_=+") for x in tmpstr.split()]
+  words = [x.lower().lstrip("?';:.$%&()\\!*[]{}|\"<>,^-_=+").rstrip("@#?';:.$%&()\\!*[]{}|\"<>,^-_=+") for x in tmpStr.split()]
   for word in words:
-    if word in LabMT:
-      score_list.append(float(LabMT[word][1]))
+    if word in someDict:
+      score_list.append(float(someDict[word][1]))
 
   ## with numpy (and mean in the namespace)
   ## happs = mean(score_list)
@@ -55,8 +63,14 @@ def happiness(tmpstr,LabMT):
     happs = sum(score_list)/float(len(score_list))
   else:
     happs = 0
-    
+
   return happs
+
+def allEmotions(tmpStr,*allDicts):
+  emotionList = []
+  for tmpDict in allDicts:
+    emotionList.append(emotion(tmpStr,tmpDict))
+  return emotionList
 
 def plothapps(happsTimeSeries,picname):
   ## uses matplotlib
@@ -78,8 +92,8 @@ def plothapps(happsTimeSeries,picname):
 if __name__ == '__main__':
   ## run from standard in
   import fileinput
-  labMT = microscope(0)
-  happsList = [happiness(line,labMT) for line in fileinput.input()]
+  labMT = emotionFileReader(0.0)
+  happsList = [emotion(line,labMT) for line in fileinput.input()]
   
   for value in happsList:
     print value
