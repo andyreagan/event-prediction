@@ -93,7 +93,9 @@ if __name__ == '__main__':
   lens2 = emotionFileReader(0.5)
   lens3 = emotionFileReader(1.0)
   lens4 = emotionFileReader(max=3.0)
-  lens5 = emotionFileReader(min=7.0)
+  lens5= emotionFileReader(max=4.0)
+  lens6 = emotionFileReader(min=7.0)
+  lens7 = emotionFileReader(min=6.0)
 
   # initialize counters and a list of the happiness values
   happsList = [[] for i in range(24*(buildDays*2+1))]
@@ -118,7 +120,7 @@ if __name__ == '__main__':
       f.close()
       
       # evaluate the happiness of that string
-      happsList[hourCount-1] = allEmotions(tmpStr,lens1,lens2,lens3,lens4,lens5)
+      happsList[hourCount-1] = allEmotions(tmpStr,lens1,lens2,lens3,lens4,lens5,lens6,lens7)
 
   # write this data to a csv real quick
   f = open('{0}/output.csv'.format(eventFolder),'a')
