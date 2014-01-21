@@ -1,4 +1,4 @@
-#!/opt/local/bin/python
+# #!/opt/local/bin/python
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -30,6 +30,8 @@ if __name__ == '__main__':
   # sort by time
   timeList = [datetime.datetime(int(x[0].split('.')[3]),int(x[0].split('.')[2]),int(x[0].split('.')[1]),int(x[0].split('.')[0])) for x in rawData]
   timeListSorted = sorted(timeList)
+
+  # make a plot of just the normal tool
   
   tmpList = [x[1] for x in rawData]
   freqList = dateSort(tmpList,timeList,timeListSorted)
@@ -61,5 +63,40 @@ if __name__ == '__main__':
   ax2.set_ylabel('Frequency')
 
   plt.savefig(picname)
-  
+
   plt.close(fig)
+
+  tmpList = [x[1] for x in rawData]
+  freqList = dateSort(tmpList,timeList,timeListSorted)
+
+  # create a figure, fig is now a matplotlib.figure.Figure instance
+  fig = plt.figure()
+  ax1 = fig.add_axes([0.15,0.2,0.7,0.7]) #  [left, bottom, width, height]          
+
+  for lens in range(2,len(rawData[0])):
+    tmpList = [x[lens] for x in rawData]
+    happsList = dateSort(tmpList,timeList,timeListSorted)
+
+    ax1.plot(range(len(happsList)),happsList,'b')
+
+  ax1.set_xlabel('Time')
+  ax1.set_ylabel('Happs')
+  # ax1.set_xlim([min(dates)-buffer,max(dates)+buffer]) 
+  # ax1.set_ylim([0,24])
+
+  ax1.set_title(plotTitle)
+  # plt.xticks([float(i)+0.5 for i in range(4)])
+  # plt.yticks([float(i)+0.5 for i in range(3)])
+  # ax1.set_xticklabels([1,5,25,50])
+  # ax1.set_yticklabels([22,28,35])
+
+  # ax2 = fig.add_axes([0.2,0.2,0.7,0.7]) #  [left, bottom, width, height]          
+  ax2 = ax1.twinx()
+
+  ax2.plot(range(len(freqList)),freqList,'r')
+
+  ax2.set_ylabel('Frequency')
+
+  picname = 'figures/{0}-all.png'.format(eventName)
+
+  plt.savefig(picname)

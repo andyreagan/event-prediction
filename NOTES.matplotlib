@@ -1,0 +1,19 @@
+To make matplotlib work on the VACC:
+
+-find your matplotlibrc. run the following commands to find the folder that it lives in:
+python
+import matplotlib
+matplotlib.matplotlib_fname()
+
+-make a copy of the matplotlibrc file, to somewhere in your user directory
+cp "yourmatplotlibrc" $HOME
+
+-comment out the line to make this setting
+backend      : Agg
+
+-in your .bashrc, set the environment variable as such: (note since we copied matplotlibrc to home, that's the location. set this to the folder that you put it in)
+export MPLCONFIGDIR=$HOME
+
+youre done!
+you may need to execute your .bashrc file, if you want it to work now (run ". $HOME/.bashrc" without the quotes)
+
