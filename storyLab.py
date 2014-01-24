@@ -45,20 +45,29 @@
 def emotionFileReader(stopval=0.0,fileName='labMT1.txt',min=1.0,max=9.0):
   ## stopval is our lens, \Delta h
   ## read the labMT dataset into a dict with this lens
-  ## must be tab-deliminated, emotion value as third tab
+  ## must be tab-deliminated
+  ## if labMT1 file, emotion value as third tab
+  ## else, it's the second tab
+  
+  if fileName == 'labMT1.txt':
+    scoreIndex = 1 # second value
+  if 'labMT2' in fileName:
+    scoreIndex = 1
+    
   f = open(fileName,'r')
-  tmpDict = dict([(line.split('\t')[0],[x.rstrip() for x in line.split('\t')[1:]]) for line in f])
+  tmpDict = dict([(str(line.split('\t')[0].rstrip('"').lstrip('"')),[x.rstrip() for x in line.split('\t')[1:]]) for line in f])
   f.close()
+  
   ## remove words
   stopWords = []
   for word in tmpDict:
-    if abs(float(tmpDict[word][1])-5.0) < stopval:
+    if abs(float(tmpDict[word][scoreIndex])-5.0) < stopval:
       stopWords.append(word)
     else:
-      if float(tmpDict[word][1]) < min:
+      if float(tmpDict[word][scoreIndex]) < min:
         stopWords.append(word)
       else:
-        if float(tmpDict[word][1]) > max:
+        if float(tmpDict[word][scoreIndex]) > max:
           stopWords.append(word)
   
   for word in stopWords:
@@ -66,13 +75,13 @@ def emotionFileReader(stopval=0.0,fileName='labMT1.txt',min=1.0,max=9.0):
 
   return tmpDict
 
-def emotion(tmpStr,someDict):
+def emotion(tmpStr,someDict,scoreIndex=1):
   score_list = []
   # doing this without the NLTK
   words = [x.lower().lstrip("?';:.$%&()\\!*[]{}|\"<>,^-_=+").rstrip("@#?';:.$%&()\\!*[]{}|\"<>,^-_=+") for x in tmpStr.split()]
   for word in words:
     if word in someDict:
-      score_list.append(float(someDict[word][1]))
+      score_list.append(float(someDict[word][scoreIndex]))
 
   ## with numpy (and mean in the namespace)
   ## happs = mean(score_list)
