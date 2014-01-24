@@ -101,7 +101,7 @@ if __name__ == '__main__':
   sadness = emotionFileReader(fileName='labMT2/sadness.txt')
   fear = emotionFileReader(fileName='labMT2/fear.txt')
   surprise = emotionFileReader(fileName='labMT2/surprise.txt')
-  happs2 = emotionFileReader(fileName='labMT2/happs.txt')
+  happs2 = emotionFileReader(fileName='labMT2/happiness.txt')
   # initialize counters and a list of the happiness values
   happsList = [[] for i in range(24*(buildDays*2+1))]
   dateList = ['' for i in range(24*(buildDays*2+1))]
