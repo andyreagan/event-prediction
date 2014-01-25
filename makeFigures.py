@@ -66,6 +66,8 @@ if __name__ == '__main__':
 
   plt.close(fig)
 
+  ## make a figure with everything on it
+
   tmpList = [x[1] for x in rawData]
   freqList = dateSort(tmpList,timeList,timeListSorted)
 
@@ -100,3 +102,43 @@ if __name__ == '__main__':
   picname = 'figures/{0}-all.png'.format(eventName)
 
   plt.savefig(picname)
+
+  ## make a figure with each thing individually
+
+  tmpList = [x[1] for x in rawData]
+  freqList = dateSort(tmpList,timeList,timeListSorted)
+  plotTitles = ['','','hedonometer: stopval 0','hedonometer: stopval 0.5','hedonometer: stopval 1','hedo, < 3','hedo < 4','hedo > 7','hedo > 6','anger','disgust','sadness','fear','suprise','happiness 2.0']
+
+  for lens in range(2,len(rawData[0])):
+
+    # create a figure, fig is now a matplotlib.figure.Figure instance
+    fig = plt.figure()
+    ax1 = fig.add_axes([0.15,0.2,0.7,0.7]) #  [left, bottom, width, height]          
+
+
+    tmpList = [x[lens] for x in rawData]
+    happsList = dateSort(tmpList,timeList,timeListSorted)
+
+    ax1.plot(range(len(happsList)),happsList,'b')
+
+    ax1.set_xlabel('Time')
+    ax1.set_ylabel('Emotion')
+    # ax1.set_xlim([min(dates)-buffer,max(dates)+buffer]) 
+    # ax1.set_ylim([0,24])
+
+    ax1.set_title(plotTitles[lens])
+    # plt.xticks([float(i)+0.5 for i in range(4)])
+    # plt.yticks([float(i)+0.5 for i in range(3)])
+    # ax1.set_xticklabels([1,5,25,50])
+    # ax1.set_yticklabels([22,28,35])
+
+    # ax2 = fig.add_axes([0.2,0.2,0.7,0.7]) #  [left, bottom, width, height]          
+    ax2 = ax1.twinx()
+ 
+    ax2.plot(range(len(freqList)),freqList,'r')
+
+    ax2.set_ylabel('Frequency')
+
+    picname = 'figures/{0}-{1:g}.png'.format(eventName,lens)
+
+    plt.savefig(picname)
