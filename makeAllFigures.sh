@@ -1,0 +1,1 @@
+for EVENT in boston005 wedding005 {bieber_arrested,facebookIPO,katrina,kenya_mall_attack,mandela,mars,newpope,obama_election,royalbaby,shutdown,thatcher,tumblr}001; do python makeFigures.py tumblr001; done
