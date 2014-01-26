@@ -53,7 +53,7 @@ do
   qsub -V run.qsub
 done
 export EVENTMONTH="11"
-for DAY in {30}
+for DAY in 30
 do
   export EVENTDAY=$DAY
   qsub -V run.qsub
