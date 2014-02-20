@@ -91,8 +91,8 @@ function loadCsv() {
 var csvLoadsRemaining = 1;
 console.log("events/" + eventName + "/output.csv");
 
-d3.text("data/" + eventName + "/output.csv", function(text) {
-    console.log("data/" + eventName + "/output.csv");
+d3.text("events/" + eventName + "/output.csv", function(text) {
+    console.log("events/" + eventName + "/output.csv");
     data = d3.csv.parseRows(text);
     var format = d3.time.format("%-H.%d.%m.%y");
     data.forEach(function(d) {d[0] = format.parse(d[0]); } )
