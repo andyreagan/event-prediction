@@ -1,0 +1,391 @@
+<html>
+<head>
+<title>My First Plot</title>
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <style>
+    body {
+      font-family: Verdana,Arial,sans-serif;
+    }
+
+    h4 {
+    font-size: .8em;
+    margin: 60px 0 5px 0;
+    }
+
+    h5 {
+    font-size: .8em;
+    margin: 10px 0 5px 0;
+    }
+
+    body {
+    min-width: 550px;      /* 2x LC width + RC width */
+    }
+
+    #figure01 {
+      padding-left: 20px;
+      float: left;
+      width: 950px;          /* LC width */
+    }
+
+  </style>
+</head>
+<body>
+
+<div id="header"></div>
+
+<h4>Select the event: <select id="eventSelect"><option value="none">none</option></select> Select the lens: <select id="lensSelect"><option value="none">none</option></select></h4>
+
+<div id="figure01" class="figure"></div>
+
+
+<div id="footer"></div>
+
+
+<!-- d3 goes here -->
+<script>
+
+events = ["none","boston005","bieber_arrested001","facebookIPO001","kenya_mall_attack001","mandela001","mars001","newpope001","NSA001","obama_election001","royalbaby001","shutdown001","thatcher001","tumblr001","wedding005"];
+lenses = ["none","hedonometer: stopval 0","hedonometer: stopval 0.5","hedonometer: stopval 1","hedo, < 3","hedo < 4","hedo > 7","hedo > 6","anger","disgust","sadness","fear","suprise","happiness 2.0"]
+
+function initializeDrop() {
+    makeEventDrop();
+    makeLensDrop();
+    loadCsv();
+}
+
+function makeEventDrop() {
+    console.log(events);
+    var mainMenu = d3.select("#eventSelect").selectAll("option").data(events)
+        .enter().append("option")
+        .property("value",function(d,i) { console.log(d); return d; })
+        .text(function(d,i) { return d; });
+    d3.select("#eventSelect")
+        .on("change", function() {
+            key = this.selectedIndex;
+            eventName = events[key];
+            console.log(events[key]);
+            loadCsv(); });
+}
+
+function makeLensDrop() {
+    console.log(lenses);
+    var mainMenu = d3.select("#lensSelect").selectAll("option").data(lenses)
+        .enter().append("option")
+        .property("value",function(d,i) { console.log(d); return d; })
+        .text(function(d,i) { return d; });
+    d3.select("#lensSelect")
+        .on("change", function() {
+            key = this.selectedIndex;
+            lensName = lenses[key];
+            lensNum = key;
+            console.log(lenses[key]);
+            console.log(key);
+            plota64T2(d3.select("#figure01")); });
+}
+
+eventName = "none";
+lensNum = 0;
+
+function loadCsv() {
+// all the data is one file
+var csvLoadsRemaining = 1;
+console.log("data/" + eventName + "/output.csv");
+
+d3.text("data/" + eventName + "/output.csv", function(text) {
+    console.log("data/" + eventName + "/output.csv");
+    data = d3.csv.parseRows(text);
+    var format = d3.time.format("%-H.%d.%m.%y");
+    data.forEach(function(d) {d[0] = format.parse(d[0]); } )
+    console.log(data);
+    data.sort(function(a, b) {
+        return a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0;
+    });
+    ymax = 1;
+    for (var i=0; i<data.length; i++) { ymax = Math.max(ymax,data[i][1]); }
+    plota64T2(d3.select("#figure01"));
+}); };
+
+// make the plot
+function plota64T2(figure) {
+
+    margina64T2 = {top: 0, right: 0, bottom: 0, left: 0},
+    figwidtha64T2 = 900 - margina64T2.left - margina64T2.right,
+    figheighta64T2 = 400 - margina64T2.top - margina64T2.bottom,
+    widtha64T2 = .775*figwidtha64T2,
+    heighta64T2 = .775*figheighta64T2;
+
+// remove an old one if it exists
+figure.select(".canvasa64T2").remove();
+
+var canvasa64T2 = figure.append("svg:svg")
+    .attr("width",figwidtha64T2)
+    .attr("height",figheighta64T2)
+    .attr("class","canvasa64T2")
+
+// create the x and y axis
+var xa64T2 = d3.time.scale()
+    .domain([data[0][0],data[data.length-1][0]])
+    .range([0, widtha64T2]);
+
+var ya64T2 = d3.scale.linear()
+    .domain([0,ymax])
+    .range([heighta64T2, 0]);
+
+var ya64T202 = d3.scale.linear()
+    .domain([0,9])
+    .range([heighta64T2, 0]);
+
+// zoom object for the axes
+var zooma64T2 = d3.behavior.zoom()
+    .y(ya64T202)
+    .x(xa64T2)
+    .on("zoom",zoomeda64T2);
+
+// create the axes themselves
+var axesa64T2 = canvasa64T2.append("g")
+    .attr("transform", "translate(" + (0.125 * figwidtha64T2) + "," +
+       ((1 - 0.125 - 0.775) * figheighta64T2) + ")")
+    .attr("width", widtha64T2)
+    .attr("height", heighta64T2)
+    .attr("class", "maina64T2")
+    .call(zooma64T2);
+
+// create the axes background
+axesa64T2.append("svg:rect")
+    .attr("width", widtha64T2)
+    .attr("height", heighta64T2)
+    .attr("class", "bga64T2")
+    .attr("fill", "#FCFCFC");
+
+// axes creation functions
+var create_xAxisa64T2 = function() {
+    return d3.svg.axis()
+    .scale(xa64T2)
+    .orient("bottom"); }
+var create_yAxisa64T2 = function() {
+    return d3.svg.axis()
+    .scale(ya64T2)
+    .orient("left"); }
+var create_yAxisa64T202 = function() {
+    return d3.svg.axis()
+    .scale(ya64T202)
+    .orient("right"); }
+
+// draw the axes
+var yAxisa64T2 = create_yAxisa64T2();
+var yAxisa64T202 = create_yAxisa64T202();
+
+axesa64T2.append("g")
+  .attr("class", "y axis a64T2")
+  .attr("transform", "(0,0)")
+  .call(yAxisa64T2);
+axesa64T2.append("g")
+  .attr("class", "y axis a64T202")
+  //.attr("transform", "(0,0)")
+  //.attr("transform", "("+ figwidtha64T2 +","+ figwidtha64T2 +")")
+  .attr("transform", "translate("+ widtha64T2 +",0)")
+  .call(yAxisa64T202);
+
+var xAxisa64T2 = create_xAxisa64T2();
+
+axesa64T2.append("g")
+  .attr("class", "x axis a64T2")
+  .attr("transform", "translate(0," + heighta64T2 + ")")
+  .call(xAxisa64T2);
+
+// create the clip boundary
+var clipa64T2 = axesa64T2.append("svg:clipPath")
+  .attr("id","clipa64T2")
+  .append("svg:rect")
+  .attr("x",0)
+  .attr("y",0)
+  .attr("width",widtha64T2)
+  .attr("height",heighta64T2);
+
+// now something else
+var unclipped_axesa64T2 = axesa64T2;
+ 
+axesa64T2 = axesa64T2.append("g")
+  .attr("clip-path","url(#clipa64T2)");
+
+// var linea64T201 = d3.svg.symbol();
+
+axesa64T2.selectAll(".circlea64T201")
+   .data(data)
+   .enter()
+   .append("circle")
+   .attr("fill", "blue")
+   .attr("class", "circlea64T201")
+   .attr("r",5)
+   .attr("cx",function(d) { var tmpVal = xa64T2(d[0]);
+                            if (tmpVal !== NaN) {
+                                return tmpVal; 
+                            }
+                            else {
+                                return 0;
+                            } } )
+   .attr("cy",function(d) { var tmpVal = ya64T2(d[1]);
+                            if (!isNaN(tmpVal)) {
+                                return tmpVal; 
+                            }
+                            else {
+                                return -10;
+                            } } )
+   .on('mouseover', function(d){
+        var circleSelection = d3.select(this).attr({r:'8'});
+        //circleSelection.select("text").style({opacity:'1.0'});
+})
+   .on('mouseout', function(d){
+        var circleSelection = d3.select(this).attr({r:'5'});
+        //circleSelection.select("text").style({opacity:'1.0'});
+});
+
+var linea64T202 = d3.svg.line()
+  .x(function(d) { return xa64T2(d[0]); })
+  .y(function(d) { return ya64T2(d[1]); })
+  .interpolate("linear");
+
+axesa64T2.append("path")
+   .datum(data)
+   .attr("class", "linea64T202")
+   .attr("d", linea64T202)
+   .attr("stroke","grey")
+   .attr("stroke-width",3)
+   .attr("fill","none");
+
+if (lensNum > 0) {
+axesa64T2.selectAll(".circlea64T203")
+   .data(data)
+   .enter()
+   .append("circle")
+   .attr("fill", "red")
+   .attr("class", "circlea64T203")
+   .attr("r",5)
+   .attr("cx",function(d) { var tmpVal = xa64T2(d[0]);
+                            if (tmpVal !== NaN) {
+                                return tmpVal; 
+                            }
+                            else {
+                                return 0;
+                            } } )
+   .attr("cy",function(d) { var tmpVal = ya64T202(d[lensNum+1]);
+                            if (!isNaN(tmpVal)) {
+                                return tmpVal; 
+                            }
+                            else {
+                                return -10;
+                            } } )
+   .on('mouseover', function(d){
+        var circleSelection = d3.select(this).attr({r:'8'});
+        //circleSelection.select("text").style({opacity:'1.0'});
+})
+   .on('mouseout', function(d){
+        var circleSelection = d3.select(this).attr({r:'5'});
+        //circleSelection.select("text").style({opacity:'1.0'});
+});
+
+var linea64T204 = d3.svg.line()
+  .x(function(d) { return xa64T2(d[0]); })
+  .y(function(d) { return ya64T202(d[lensNum+1]); })
+  .interpolate("linear");
+
+axesa64T2.append("path")
+   .datum(data)
+   .attr("class", "linea64T204")
+   .attr("d", linea64T204)
+   .attr("stroke","grey")
+   .attr("stroke-width",3)
+   .attr("fill","none"); 
+}
+else { d3.selectAll(".linea64T204").remove();
+       d3.selectAll(".circlea64T203").remove(); }
+
+    canvasa64T2.append("text")
+        .text("Time")
+        .attr("class", "axes-text a64T2")
+        .attr("x",widtha64T2/2+(figwidtha64T2-widtha64T2)/2)
+        .attr("y",3*(figheighta64T2-heighta64T2)/4+heighta64T2+10)
+        .attr("font-size", "12.0px")
+        .attr("fill", "#000000")
+        .attr("transform", "rotate(-0.0," + (widtha64T2/2+(figwidtha64T2-widtha64T2)/2) + "," + (3*(figheighta64T2-heighta64T2)/4+heighta64T2+10) + ")")
+        .attr("style", "text-anchor: middle;");
+    canvasa64T2.append("text")
+        .text("Frequency")
+        .attr("class", "axes-text a64T2")
+        .attr("x",(figwidtha64T2-widtha64T2)/4)
+        .attr("y", figheighta64T2/2)
+        .attr("font-size", "12.0px")
+        .attr("fill", "#000000")
+        .attr("transform", "rotate(-90.0," + ((figwidtha64T2-widtha64T2)/4) + "," + (figheighta64T2/2) + ")")
+        .attr("style", "text-anchor: middle;");
+    if (lensNum > 0) {
+    canvasa64T2.append("text")
+        .text("Emos")
+        .attr("class", "axes-text a64T202")
+        .attr("x",figwidtha64T2-(figwidtha64T2-widtha64T2)/4)
+        .attr("y", figheighta64T2/2)
+        .attr("font-size", "12.0px")
+        .attr("fill", "#000000")
+        .attr("transform", "rotate(90.0," + (figwidtha64T2-((figwidtha64T2-widtha64T2)/4)) + "," + (figheighta64T2/2) + ")")
+        .attr("style", "text-anchor: middle;");
+    }
+    else { d3.select(".axes-text.a64T202").remove(); }
+
+    function zoomeda64T2() {
+        d3.select(".x.axis.a64T2").call(xAxisa64T2);
+        //d3.select(".y.axis.a64T2").call(yAxisa64T2);
+        d3.select(".y.axis.a64T202").call(yAxisa64T202);
+
+        axesa64T2.selectAll(".circlea64T201")
+           .attr("r",5)
+           .attr("cx",function(d) { var tmpVal = xa64T2(d[0]);
+                            if (tmpVal !== NaN) {
+                                return tmpVal; 
+                            }
+                            else {
+                                return 0;
+                            } } );
+           // don't zoom y on the frequency
+           /* .attr("cy",function(d) { var tmpVal = ya64T2(d[1]);
+                            //console.log(tmpVal);
+                            if (!isNaN(tmpVal)) {
+                                return tmpVal; 
+                            }
+                            else {
+                                return -10;
+                            } } ); */
+
+        axesa64T2.selectAll(".circlea64T203")
+           .attr("r",5)
+           .attr("cx",function(d) { var tmpVal = xa64T2(d[0]);
+                            if (tmpVal !== NaN) {
+                                return tmpVal; 
+                            }
+                            else {
+                                return 0;
+                            } } )
+           .attr("cy",function(d) { var tmpVal = ya64T202(d[lensNum+1]);
+                            //console.log(tmpVal);
+                            if (!isNaN(tmpVal)) {
+                                return tmpVal; 
+                            }
+                            else {
+                                return -10;
+                            } } );
+
+	// don't zoom the whole freq line (or do)
+        axesa64T2.select(".linea64T202")
+          .attr("d",linea64T202(data));
+        axesa64T2.select(".linea64T204")
+          .attr("d",linea64T204(data));
+     };
+};
+
+initializeDrop();
+
+</script>
+
+</body>
+</html>
+
+
