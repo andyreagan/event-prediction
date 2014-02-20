@@ -1,0 +1,11 @@
+To make a local webserver to view results (w Python 2.x), just type
+
+python -m SimpleHTTPServer 8888 &
+
+For Python 3.x, just do
+
+python -m http.server 8888 &
+
+Either way, navigate to
+
+http://localhost:8888/allemotions.html
